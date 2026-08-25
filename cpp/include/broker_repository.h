@@ -15,6 +15,9 @@ public:
     void unregistered();
 protected:
     explicit BrokerRepository(const std::string& name):name(name){}
+
+    virtual void on_registered() = 0;
+    virtual void on_unregistered() = 0;
 };
 
 #endif //BROKER_BROKER_REPOSITORY_H

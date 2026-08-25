@@ -18,11 +18,15 @@ create_static_lib(
 
         cpp/src/broker.cpp
         cpp/src/broker_repository.cpp
+        cpp/src/broker_repository_db.cpp
 )
 
 depends(console
         thread_pool
         GIT_REPOSITORY https://github.com/LithologIQ/cpp_tools.git
+        GIT_TAG main)
+
+depends(GIT_REPOSITORY https://github.com/LithologIQ/sqlite.git
         GIT_TAG main)
 
 depends(socket_tcp
