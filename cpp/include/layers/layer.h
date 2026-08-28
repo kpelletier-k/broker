@@ -7,6 +7,8 @@ class Layer{
 public:
     const std::string name;
 
+    virtual void attached() = 0;
+    virtual void detached() = 0;
 protected:
     explicit Layer(const std::string& name) : name(name){}
 };

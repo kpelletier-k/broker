@@ -5,6 +5,6 @@
 
 class LayerPipe : public Layer{
 public:
-    explicit LayerPipe(const std::string& name) : Layer(name){}
+    explicit LayerPipe(const std::string& name, const std::string& path = "");
 };
 #endif //BROKER_LAYER_PIPE_H
