@@ -3,11 +3,12 @@
 
 #include "broker_repository.h"
 #include <sqlite.h>
+#include <sqlite_create.h>
 
 class BrokerRepositoryDb : public BrokerRepository{
 
 protected:
-    explicit BrokerRepositoryDb(const std::string& name, const std::string& db_file = "");
+    explicit BrokerRepositoryDb(const std::string& name, const std::string& db_file = "", const std::list<SQLiteCreate::Field> &fields = {});
 
 private:
     std::unique_ptr<SQLite> _db;

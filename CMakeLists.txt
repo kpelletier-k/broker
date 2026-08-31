@@ -21,6 +21,7 @@ create_static_lib(
         cpp/src/broker.cpp
         cpp/src/broker_repository.cpp
         cpp/src/broker_repository_db.cpp
+        cpp/src/broker_repository_tag.cpp
 )
 
 depends(console
@@ -29,8 +30,8 @@ depends(console
         GIT_REPOSITORY https://github.com/LithologIQ/cpp_tools.git
         GIT_TAG main)
 
-#depends(GIT_REPOSITORY https://github.com/lithologiq/tag.git
-#        GIT_TAG main)
+depends(GIT_REPOSITORY https://github.com/lithologiq/tag.git
+        GIT_TAG main)
 
 depends(GIT_REPOSITORY https://github.com/LithologIQ/json_rpc.git
         GIT_TAG main)
@@ -45,4 +46,5 @@ depends(socket_tcp
 create_cpp_test(
         cpp/test/main.cpp
         cpp/test/layers.cpp
+        cpp/test/tags.cpp
 )
