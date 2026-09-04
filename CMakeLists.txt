@@ -12,16 +12,22 @@ endif()
 project(broker CXX)
 
 create_static_lib(
-        cpp/src/layers/layer_pipe.cpp
-        cpp/src/layers/layer_tcp.cpp
-        cpp/src/layers/layer_ws.cpp
+        cpp/src/layers/interfaces/layer_pipe.cpp
+        cpp/src/layers/interfaces/layer_tcp.cpp
+        cpp/src/layers/interfaces/layer_ws.cpp
 
-        cpp/src/protocols/protocol_json.cpp
+        cpp/src/layers/session/layer_session.cpp
+
+        cpp/src/layers/protocols/protocol_json.cpp
 
         cpp/src/broker.cpp
-        cpp/src/broker_repository.cpp
-        cpp/src/broker_repository_db.cpp
-        cpp/src/broker_repository_tag.cpp
+        cpp/src/broker/broker_cmd.cpp
+        cpp/src/broker/broker_layers.cpp
+        cpp/src/broker/broker_repositories.cpp
+        cpp/src/broker/broker_tags.cpp
+
+        cpp/src/repository/broker_repository.cpp
+        cpp/src/repository/broker_repository_db.cpp
 )
 
 depends(console
@@ -45,6 +51,7 @@ depends(socket_tcp
 
 create_cpp_test(
         cpp/test/main.cpp
+        cpp/test/broker.cpp
         cpp/test/layers.cpp
         cpp/test/tags.cpp
 )

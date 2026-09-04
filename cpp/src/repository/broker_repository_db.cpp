@@ -1,7 +1,7 @@
-#include "../include/broker_repository_db.h"
+#include "../../include/repository/broker_repository_db.h"
 
 BrokerRepositoryDb::BrokerRepositoryDb(const std::string& name, const std::string& db_file, const std::list<SQLiteCreate::Field> &fields):
-    BrokerRepository(name),
+    BrokerRepository(name, {}, {}),
     _db(_open(name, db_file)){
     if (_db)
         _db->create({name, fields});

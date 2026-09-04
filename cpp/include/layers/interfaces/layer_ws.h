@@ -1,7 +1,7 @@
 #ifndef BROKER_LAYER_WS_H
 #define BROKER_LAYER_WS_H
 
-#include "layer.h"
+#include "../layer.h"
 
 class LayerWS : public Layer{
 public:

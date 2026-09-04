@@ -1,7 +1,7 @@
 #ifndef BROKER_LAYER_TCP_H
 #define BROKER_LAYER_TCP_H
 
-#include "layer.h"
+#include "../layer.h"
 #include <socket_tcp_stack.h>
 
 using namespace PeripheralIO;
@@ -15,6 +15,8 @@ public:
     void detached() override;
 private:
     SocketTcpStack _socket_tcp;
+
+    using EventLog::publish;
 
     EventLog::OnEventStorageFnc _log_cb;
     EventConnection::OnEventStorageFnc _conn_cb;

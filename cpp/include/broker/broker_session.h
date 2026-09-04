@@ -1,0 +1,6 @@
+#ifndef BROKER_BROKER_SESSION_H
+#define BROKER_BROKER_SESSION_H
+
+class BrokerSession {};
+
+#endif //BROKER_BROKER_SESSION_H

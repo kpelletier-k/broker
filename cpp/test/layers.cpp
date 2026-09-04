@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "../include/broker.h"
-#include "../include/layers/layer_tcp.h"
+#include "../include/layers/interfaces/layer_tcp.h"
 
 class TestLayerTcp : public LayerTcp{
 public:
@@ -24,7 +24,7 @@ TEST(BrokerLayers, layer_init_map){
 
 TEST(BrokerLayers, layer_init_list){
     const auto layer = std::make_shared<TestLayerTcp>();
-    Broker broker({layer}, {});
+    Broker broker({{layer->name,layer}}, {}, {}, {});
     //todo
 
     std::this_thread::sleep_for(std::chrono::seconds(100000));

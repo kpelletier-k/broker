@@ -1,33 +1,32 @@
 #ifndef BROKER_BROKER_H
 #define BROKER_BROKER_H
 
-#include <map>
-#include "broker_repository.h"
-#include "layers/layer.h"
+#include "broker/broker_tags.h"
+#include "broker/broker_cmd.h"
+#include "broker/broker_layers.h"
+#include "broker/broker_repositories.h"
+#include "broker/broker_session.h"
 
-class Broker{
+class Broker: public EventLog, BrokerLayers, BrokerRepositories, BrokerCmd, BrokerTags{
 
 public:
-    explicit Broker(const std::initializer_list<std::shared_ptr<Layer>>& layers, const std::initializer_list<std::shared_ptr<BrokerRepository>>& repositories);
-    explicit Broker(const std::map<std::string,std::shared_ptr<Layer>>& layers, const std::map<std::string,std::shared_ptr<BrokerRepository>>& repositories);
+    explicit Broker(const std::map<std::string,std::shared_ptr<Layer>>& layers,
+                    const std::map<std::string,std::shared_ptr<BrokerRepository>>& repositories,
+                    const std::map<std::string, BrokerCmd::CallerFnc>& callers,
+                    const std::map<std::string,std::shared_ptr<Tag>>& tags);
 
-    ~Broker();
+    ~Broker() override;
 
-    void emplace(const std::shared_ptr<BrokerRepository>& repository);
-    void remove(const std::shared_ptr<BrokerRepository>& repository);
+    std::shared_ptr<Tag> tag(const std::string& name);
+    BrokerCmd::CallerFnc cmd(const std::string& name);
+    std::shared_ptr<BrokerRepository> repository(const std::string& name);
+
+protected:
+    void on_log(const std::string& name, EventLogType type, const std::string& message) override;
+
 private:
-    const std::map<std::string, std::shared_ptr<Layer>> _layers;
 
-    std::mutex _repositories_mtx;
-    std::map<std::string, std::shared_ptr<BrokerRepository>> _repositories;
-
-
-    static void _publish_attached(const std::map<std::string, std::shared_ptr<Layer>>& layers);
-    static void _publish_detached(const std::map<std::string, std::shared_ptr<Layer>>& layers);
-    static void _publish_registered(const std::map<std::string, std::shared_ptr<BrokerRepository>>& repositories);
-
-    template<typename T>
-    static std::map<std::string, std::shared_ptr<T>> _from(const std::initializer_list<std::shared_ptr<T>>& values);
+    std::list<std::shared_ptr<BrokerSession>> _sessions;
 };
 
 #endif //BROKER_BROKER_H
