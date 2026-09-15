@@ -1,21 +1,23 @@
 #ifndef BROKER_BROKER_CMD_H
 #define BROKER_BROKER_CMD_H
 
-#include "broker_cmd_type.h"
-#include <tag.h>
 #include <functional>
 #include <map>
+#include <string>
+#include <mutex>
+
+#include "../layers/layer.h"
 
 class BrokerCmd{
 public:
-    typedef std::function<BrokerCmdReply(const BrokerCmdMessage& msg)> CallerFnc;
+    typedef std::function<bool(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc)> CmdCallFnc;
 
-    CallerFnc operator[](const std::string& name);
+    ~BrokerCmd();
 
-protected:
-    explicit BrokerCmd(const std::map<std::string, CallerFnc>& callers);
-
+    void emplace_cmd(const std::string& cmd_name, const CmdCallFnc& fnc);
+    CmdCallFnc find_cmd(const std::string& cmd_name);
 private:
-    std::map<std::string, CallerFnc> _callers;
+    std::mutex _mtx;
+    std::map<std::string, CmdCallFnc> _callers;
 };
 #endif //BROKER_BROKER_CMD_H

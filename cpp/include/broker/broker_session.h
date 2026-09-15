@@ -1,6 +1,10 @@
 #ifndef BROKER_BROKER_SESSION_H
 #define BROKER_BROKER_SESSION_H
 
-class BrokerSession {};
+#include <string>
+
+struct BrokerSession{
+    std::string parent;
+};
 
 #endif //BROKER_BROKER_SESSION_H

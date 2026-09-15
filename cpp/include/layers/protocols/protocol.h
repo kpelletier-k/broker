@@ -1,8 +1,38 @@
 #ifndef BROKER_PROTOCOL_H
 #define BROKER_PROTOCOL_H
 
-class Protocol{
+#include <variant>
+#include <vector>
+#include <cstdint>
+#include <string>
+#include <optional>
+#include <tag.h>
 
+
+struct ProtoMessage{
+    std::string name;
+    std::shared_ptr<Tag> parameters;
+    std::shared_ptr<Tag> id;
+};
+
+struct ProtoResult{
+    std::shared_ptr<Tag> value;
+    std::shared_ptr<Tag> id;
+};
+
+struct ProtoError{
+    std::string msg;
+    std::shared_ptr<Tag> id;
+};
+typedef std::variant<ProtoResult, ProtoError> ReplyProto;
+
+class Protocol{
+public:
+    virtual ~Protocol() = default;
+
+    virtual std::optional<ProtoMessage> parse(const std::vector<uint8_t>& data) = 0;
+    virtual std::vector<uint8_t> parse(const ProtoMessage& proto) = 0;
+    virtual std::vector<uint8_t> parse(const ReplyProto& proto) = 0;
 };
 
 #endif //BROKER_PROTOCOL_H

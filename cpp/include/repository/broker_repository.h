@@ -5,7 +5,7 @@
 #include "../broker/broker_cmd.h"
 #include "../broker/broker_tags.h"
 
-class BrokerRepository : protected BrokerCmd, protected BrokerTags{
+class BrokerRepository : protected BrokerTags, public virtual BrokerCmd{
 
 public:
     const std::string name;
@@ -14,9 +14,12 @@ public:
     void unregistered();
 protected:
     explicit BrokerRepository(const std::string& name,
-                    const std::map<std::string, BrokerCmd::CallerFnc>& callers,
+                    const std::map<std::string, BrokerCmd::CmdCallFnc>& callers,
                     const std::map<std::string,std::shared_ptr<Tag>>& tags):
-        name(name), BrokerCmd(callers), BrokerTags(tags) {}
+    BrokerTags(tags), name(name){
+        for (const auto& e : callers)
+            emplace_cmd(e.first, e.second);
+    }
 
 };
 

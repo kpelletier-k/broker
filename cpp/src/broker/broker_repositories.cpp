@@ -5,6 +5,10 @@ BrokerRepositories::BrokerRepositories(const std::map<std::string,std::shared_pt
     _repositories(repositories){}
 
 std::shared_ptr<BrokerRepository> BrokerRepositories::operator[](const std::string& name){
+    return find(name);
+}
+
+std::shared_ptr<BrokerRepository> BrokerRepositories::find(const std::string& name){
     std::lock_guard<std::mutex> lock(_repositories_mtx);
     const auto it = _repositories.find(name);
     return it != _repositories.end() ? it->second : nullptr;

@@ -7,8 +7,14 @@ BrokerLayers::BrokerLayers(const std::map<std::string, std::shared_ptr<Layer>>& 
             .log_cb = l.second->emplace([this](const std::string& name, EventLogType type, const std::string& message){
                 on_log(name, type, message);
             }),
-            .session_cb = l.second->emplace([this](const std::string& name, const std::shared_ptr<LayerSession>& session){
-                int y = 0;//on_log(name, type, message);
+            .open_session_cb = l.second->emplace([this](const std::string& name, const std::shared_ptr<BrokerSession>& session){
+                int y = 0;
+            }),
+            .close_session_cb = l.second->emplace([this](const std::string& name, const std::shared_ptr<BrokerSession>& session, const std::string& reason){
+                int y = 0;
+            }),
+            .message_cb = l.second->emplace([this](const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc){
+                on_message(session, msg, reply_fnc);
             })
         };
     }

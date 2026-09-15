@@ -1,11 +1,12 @@
 #include <gtest/gtest.h>
 #include "../include/broker.h"
 #include "../include/layers/interfaces/layer_tcp.h"
+#include "../include/layers/protocols/protocol_json.h"
 
 class TestLayerTcp : public LayerTcp{
 public:
 
-    TestLayerTcp():LayerTcp("layer", SocketAddressV4{"127.0.0.1",14234}){}
+    TestLayerTcp():LayerTcp("layer", std::make_shared<ProtocolJson>(), SocketAddressV4{"127.0.0.1",14234}){}
 
     void attached() override{
         LayerTcp::attached();
@@ -24,7 +25,7 @@ TEST(BrokerLayers, layer_init_map){
 
 TEST(BrokerLayers, layer_init_list){
     const auto layer = std::make_shared<TestLayerTcp>();
-    Broker broker({{layer->name,layer}}, {}, {}, {});
+    Broker broker("main",{layer}, {}, {}, {});
     //todo
 
     std::this_thread::sleep_for(std::chrono::seconds(100000));

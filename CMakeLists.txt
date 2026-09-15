@@ -16,11 +16,10 @@ create_static_lib(
         cpp/src/layers/interfaces/layer_tcp.cpp
         cpp/src/layers/interfaces/layer_ws.cpp
 
-        cpp/src/layers/session/layer_session.cpp
-
         cpp/src/layers/protocols/protocol_json.cpp
 
         cpp/src/broker.cpp
+        cpp/src/broker/broker_base.cpp
         cpp/src/broker/broker_cmd.cpp
         cpp/src/broker/broker_layers.cpp
         cpp/src/broker/broker_repositories.cpp

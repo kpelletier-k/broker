@@ -7,11 +7,12 @@
 
 #include "../repository/broker_repository.h"
 
-class BrokerRepositories{
+class BrokerRepositories : private virtual BrokerCmd{
 
 public:
 
     std::shared_ptr<BrokerRepository> operator[](const std::string& name);
+    std::shared_ptr<BrokerRepository> find(const std::string& name);
 
     void emplace(const std::shared_ptr<BrokerRepository>& repository);
     void remove(const std::shared_ptr<BrokerRepository>& repository);
