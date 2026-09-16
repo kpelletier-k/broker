@@ -20,6 +20,12 @@ BrokerLayers::BrokerLayers(const std::map<std::string, std::shared_ptr<Layer>>& 
     }
 }
 
+BrokerLayers::~BrokerLayers(){
+    for (const auto& l : _layers)
+        l.second.layer->clear();
+    _layers.clear();
+}
+
 void BrokerLayers::_publish_attached(){
     for (const auto& l : _layers)
         l.second.layer->attached();

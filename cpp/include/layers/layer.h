@@ -26,9 +26,19 @@ public:
 
     virtual void attached() = 0;
     virtual void detached() = 0;
+
+    inline void clear();
+
 protected:
     explicit Layer(const std::string& name, const std::shared_ptr<Protocol>& protocol) : name(name), protocol{protocol}{}
 
 };
+
+inline void Layer::clear(){
+    EventLog::clear();
+    LayerOpenSession::clear();
+    LayerCloseSession::clear();
+    LayerMessage::clear();
+}
 
 #endif //BROKER_LAYER_H

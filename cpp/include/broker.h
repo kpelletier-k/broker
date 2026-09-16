@@ -10,13 +10,16 @@
 class Broker: public EventLog, BrokerLayers, BrokerRepositories, BrokerTags, public virtual BrokerCmd{
 
 public:
+
+    using EventLog::emplace;
+
     const std::string name;
 
     explicit Broker(const std::string& name,
-                    const std::list<std::shared_ptr<Layer>>& layers,
-                    const std::list<std::shared_ptr<BrokerRepository>>& repositories,
-                    const std::map<std::string, BrokerCmd::CmdCallFnc>& callers,
-                    const std::list<std::shared_ptr<Tag>>& tags);
+                    const std::list<std::shared_ptr<Layer>>& layers = {},
+                    const std::list<std::shared_ptr<BrokerRepository>>& repositories = {},
+                    const std::map<std::string, CmdCallFnc>& callers = {},
+                    const std::list<std::shared_ptr<Tag>>& tags = {});
 
     ~Broker() override;
 
@@ -32,6 +35,8 @@ private:
     std::list<std::shared_ptr<BrokerSession>> _sessions;
 
     bool _is_local_broker(const std::vector<std::string>& paths) const;
+    bool _call_local_broker(const std::vector<std::string>& paths, const std::shared_ptr<BrokerSession>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc);
+    bool _call_local_repo(const std::vector<std::string>& paths, const std::shared_ptr<BrokerSession>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc);
 
     static std::vector<std::string> _split(const std::string& str, char delimiter = '.');
 

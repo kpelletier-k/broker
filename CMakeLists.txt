@@ -29,8 +29,7 @@ create_static_lib(
         cpp/src/repository/broker_repository_db.cpp
 )
 
-depends(console
-        events
+depends(events
         thread_pool
         GIT_REPOSITORY https://github.com/LithologIQ/cpp_tools.git
         GIT_TAG main)

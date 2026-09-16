@@ -20,6 +20,7 @@ private:
 
 protected:
     explicit BrokerLayers(const std::map<std::string, std::shared_ptr<Layer>>& layers);
+    ~BrokerLayers();
 
     void _publish_attached();
     void _publish_detached();

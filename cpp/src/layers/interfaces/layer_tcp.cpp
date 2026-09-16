@@ -31,9 +31,14 @@ void LayerTcp::attached(){
             publish(this->name, EventLogType::warning, client->ipv->address() + ":" + std::to_string(client->ipv->port()) + " was killed session");
     });
 
-    _socket_tcp.bind();
+    _socket_tcp.bind(); // todo make thread to retry connection
 }
-void LayerTcp::detached(){}
+void LayerTcp::detached(){
+    _recv_cb = nullptr;
+    _conn_cb = nullptr;
+    _log_cb = nullptr;
+    _socket_tcp.descriptor->close();
+}
 
 std::shared_ptr<BrokerSession> LayerTcp::_make_session(const std::shared_ptr<SocketDescriptor>& client){
     std::lock_guard<std::mutex> lock(_sessions_mtx);
@@ -56,22 +61,6 @@ void LayerTcp::_walk(const std::shared_ptr<BrokerSession>& session, const std::s
         });
     }else
         publish(session, msg, [](const ReplyProto& reply){});
-    // switch (msg.index()){
-    // case 0:
-    //     publish(name, EventLogType::error, client->ipv->address() + ":" + std::to_string(client->ipv->port()) + " fail to parse message");
-    //     break;
-    // case 1:{//method
-    //     const auto res = publish(name, std::get<ProtoMessage>(msg));
-    //     if (!res.empty())
-    //         _socket_tcp.send(client, protocol->parse(res.front()));
-    //     else
-    //         publish(name, EventLogType::error, client->ipv->address() + ":" + std::to_string(client->ipv->port()) + " fail to parse method");
-    //     }
-    //     break;
-    // case 2://notif
-    //     publish(name, std::get<ProtoNotification>(msg));
-    //     break;
-    // }
 }
 
 void LayerTcp::_on_connected(const std::string& name, const std::shared_ptr<SocketDescriptor>& client){
