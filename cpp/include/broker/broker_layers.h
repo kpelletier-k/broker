@@ -25,6 +25,9 @@ protected:
     void _publish_attached();
     void _publish_detached();
 
+    virtual void on_session_open(const std::shared_ptr<BrokerSession>& session) = 0;
+    virtual void on_session_close(const std::shared_ptr<BrokerSession>& session) = 0;
+
     virtual void on_log(const std::string& name, EventLogType type, const std::string& message) = 0;
     virtual bool on_message(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc) = 0; // return success
 };

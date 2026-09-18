@@ -26,10 +26,10 @@ create_static_lib(
         cpp/src/broker/broker_tags.cpp
 
         cpp/src/repository/broker_repository.cpp
-        cpp/src/repository/broker_repository_db.cpp
 )
 
-depends(events
+depends(console
+        events
         thread_pool
         GIT_REPOSITORY https://github.com/LithologIQ/cpp_tools.git
         GIT_TAG main)

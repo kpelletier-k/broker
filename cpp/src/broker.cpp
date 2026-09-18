@@ -4,7 +4,7 @@
 Broker::Broker(const std::string& name,
                 const std::list<std::shared_ptr<Layer>>& layers,
                 const std::list<std::shared_ptr<BrokerRepository>>& repositories,
-                const std::map<std::string, BrokerCmd::CmdCallFnc>& callers,
+                const std::map<std::string, CmdCallFnc>& callers,
                 const std::list<std::shared_ptr<Tag>>& tags) :
         BrokerLayers(_to(layers)),
         BrokerRepositories(_to(repositories)),
@@ -25,6 +25,12 @@ std::shared_ptr<Tag> Broker::tag(const std::string& name){
 
 std::shared_ptr<BrokerRepository> Broker::repository(const std::string& name){
     return BrokerRepositories::operator[](name);}
+
+void Broker::on_session_open(const std::shared_ptr<BrokerSession>& session){
+    _publish_session_open(session);}
+
+void Broker::on_session_close(const std::shared_ptr<BrokerSession>& session){
+    _publish_session_close(session);}
 
 void Broker::on_log(const std::string& name, EventLogType type, const std::string& message){
     EventLog::publish(name, type, message);}

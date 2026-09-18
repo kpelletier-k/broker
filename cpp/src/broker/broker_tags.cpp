@@ -61,7 +61,7 @@ bool BrokerTags::_tag_unregister(const std::shared_ptr<BrokerSession>& session, 
 bool BrokerTags::_tag_value(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc){
     const auto tag = _find(msg.parameters);
     if (!tag){
-        reply_fnc(ProtoError("Tag not found", msg.id));
+        reply_fnc(ProtoError::custom("Tag not found", msg.id));
         return false;
     }
     _update(msg.parameters, tag);

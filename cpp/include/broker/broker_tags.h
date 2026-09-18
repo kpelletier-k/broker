@@ -7,7 +7,7 @@
 
 typedef Event<void, const std::string&, const std::shared_ptr<Tag>&> BrokerTagRegistered; // void (const std::string& name, const std::shared_ptr<Tag>& tag)
 
-class BrokerTags : private virtual BrokerCmd, protected BrokerTagRegistered{
+class BrokerTags : virtual BrokerCmd, protected BrokerTagRegistered{
 
 public:
 
@@ -25,6 +25,10 @@ public:
 protected:
     explicit BrokerTags(const std::map<std::string,std::shared_ptr<Tag>>& tags = {});
 
+    virtual bool _tag_register(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc);
+    virtual bool _tag_unregister(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc);
+    virtual bool _tag_value(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc);
+
 private:
 
     struct TagElement{
@@ -38,10 +42,6 @@ private:
 
     std::shared_ptr<Tag> _find(const std::shared_ptr<Tag>& params);
     static void _update(const std::shared_ptr<Tag>& params, const std::shared_ptr<Tag>& target);
-
-    bool _tag_register(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc);
-    bool _tag_unregister(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc);
-    bool _tag_value(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc);
 
 
     template<typename T>

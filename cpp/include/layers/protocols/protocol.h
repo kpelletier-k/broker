@@ -20,9 +20,20 @@ struct ProtoResult{
     std::shared_ptr<Tag> id;
 };
 
+enum class ProtoErrorCode : uint16_t{
+    parse_error = 0x0001,
+    cmd_not_exist = 0x0002,
+    params_error = 0x0004,
+    custom_error = 0x0008
+};
+
 struct ProtoError{
+    ProtoErrorCode code;
     std::string msg;
     std::shared_ptr<Tag> id;
+
+    static ProtoError custom(const std::string& msg, const std::shared_ptr<Tag>& id){
+        return {.code = ProtoErrorCode::custom_error, .msg = msg, .id = id};}
 };
 typedef std::variant<ProtoResult, ProtoError> ReplyProto;
 

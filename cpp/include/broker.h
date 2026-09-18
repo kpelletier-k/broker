@@ -12,6 +12,7 @@ class Broker: public EventLog, BrokerLayers, BrokerRepositories, BrokerTags, pub
 public:
 
     using EventLog::emplace;
+    using BrokerRepositories::emplace;
 
     const std::string name;
 
@@ -27,6 +28,8 @@ public:
     std::shared_ptr<BrokerRepository> repository(const std::string& name);
 
 protected:
+    void on_session_open(const std::shared_ptr<BrokerSession>& session) override;
+    void on_session_close(const std::shared_ptr<BrokerSession>& session) override;
     void on_log(const std::string& name, EventLogType type, const std::string& message) override;
     bool on_message(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc) override;
 

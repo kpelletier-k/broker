@@ -35,6 +35,12 @@ public:
         const std::map<std::string, BrokerCmd::CmdCallFnc>& callers = {},
         const std::map<std::string,std::shared_ptr<Tag>>& tags = {}):
     BrokerRepository(name, callers, tags) {}
+
+protected:
+    void _registered() override{}
+    void _unregistered() override{}
+    void _session_open(const std::shared_ptr<BrokerSession>& session) override{}
+    void _session_close(const std::shared_ptr<BrokerSession>& session) override{}
 };
 
 TEST(Broker, repositories){
