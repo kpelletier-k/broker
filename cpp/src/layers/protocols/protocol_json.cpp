@@ -74,7 +74,7 @@ std::string ProtocolJson::_dump(const ProtoMessage& msg){
     };
     if (msg.id)
         json["id"] = _dump(msg.id);
-    return json.to_string();
+    return json.dump();
 }
 
 std::string ProtocolJson::_dump(const ReplyProto& msg){
@@ -87,7 +87,7 @@ std::string ProtocolJson::_dump(const ReplyProto& msg){
 }
 
 json_any ProtocolJson::_dump(const std::shared_ptr<Tag>& tag){
-    if (!tag)return nullptr;
+    if (!tag)return {};
 
     switch (tag->type()){
         case TagDataType::tag_bool:     return {tag->value<bool>()};

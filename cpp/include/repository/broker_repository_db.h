@@ -17,13 +17,13 @@ protected:
                                 const std::string& db_file = "",
                                 const std::list<SQLiteCreate::Field> &fields = {},
                                 const std::map<std::string, CmdCallFnc>& callers = {},
-                                const std::map<std::string,std::shared_ptr<Tag>>& tags = {});
+                                const std::list<std::shared_ptr<Tag>>& tags = {});
 
     explicit BrokerRepositoryDb(const std::string& name,
                                 const std::shared_ptr<SQLite>& db,
                                 const std::list<SQLiteCreate::Field> &fields = {},
                                 const std::map<std::string, CmdCallFnc>& callers = {},
-                                const std::map<std::string,std::shared_ptr<Tag>>& tags = {});
+                                const std::list<std::shared_ptr<Tag>>& tags = {});
 
 
     void _registered() override;
@@ -44,7 +44,7 @@ BrokerRepositoryDb<SETTINGS>::BrokerRepositoryDb(const std::string& name,
                                         const std::string& db_file,
                                         const std::list<SQLiteCreate::Field> &fields,
                                         const std::map<std::string, CmdCallFnc>& callers,
-                                        const std::map<std::string,std::shared_ptr<Tag>>& tags):
+                                        const std::list<std::shared_ptr<Tag>>& tags):
     BrokerRepositoryDb(name, _open(name, db_file), fields, callers, tags) {}
 
 template<typename SETTINGS>
@@ -52,7 +52,7 @@ BrokerRepositoryDb<SETTINGS>::BrokerRepositoryDb(const std::string& name,
                                         const std::shared_ptr<SQLite>& db,
                                         const std::list<SQLiteCreate::Field> &fields,
                                         const std::map<std::string, CmdCallFnc>& callers,
-                                        const std::map<std::string,std::shared_ptr<Tag>>& tags):
+                                        const std::list<std::shared_ptr<Tag>>& tags):
     BrokerRepository(name, callers, tags),
     _db(db){
     if (_db){

@@ -40,20 +40,22 @@ void LayerTcp::detached(){
     _socket_tcp.descriptor->close();
 }
 
-std::shared_ptr<BrokerSession> LayerTcp::_make_session(const std::shared_ptr<SocketDescriptor>& client){
+std::shared_ptr<BrokerSessionS> LayerTcp::_make_session(const std::shared_ptr<SocketDescriptor>& client){
     std::lock_guard<std::mutex> lock(_sessions_mtx);
-    auto session = std::make_shared<BrokerSession>(name);
+    auto session = std::make_shared<BrokerSessionS>(name, [client, this](const ProtoMessage& msg){
+        _socket_tcp.send(client, protocol->parse(msg));
+    });
     _sessions[client] = session;
     return session;
 }
 
-std::shared_ptr<BrokerSession> LayerTcp::_find_session(const std::shared_ptr<SocketDescriptor>& client){
+std::shared_ptr<BrokerSessionS> LayerTcp::_find_session(const std::shared_ptr<SocketDescriptor>& client){
     std::lock_guard<std::mutex> lock(_sessions_mtx);
     const auto it = _sessions.find(client);
     return it != _sessions.end() ? it->second : nullptr;
 }
 
-void LayerTcp::_walk(const std::shared_ptr<BrokerSession>& session, const std::shared_ptr<SocketDescriptor>& client, const ProtoMessage& msg){
+void LayerTcp::_walk(const std::shared_ptr<BrokerSessionS>& session, const std::shared_ptr<SocketDescriptor>& client, const ProtoMessage& msg){
 
     if (msg.id){
         publish(session, msg, [this, client](const ReplyProto& reply){

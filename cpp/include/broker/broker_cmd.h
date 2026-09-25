@@ -10,8 +10,9 @@
 
 class BrokerCmd{
 public:
-    typedef std::function<bool(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc)> CmdCallFnc;
+    typedef std::function<bool(const std::shared_ptr<BrokerSessionS>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc)> CmdCallFnc;
 
+    explicit BrokerCmd(const std::map<std::string, CmdCallFnc>& callers = {});
     virtual ~BrokerCmd();
 
     void emplace_cmd(const std::string& cmd_name, const CmdCallFnc& fnc);

@@ -28,12 +28,12 @@ private:
     EventReceived::OnEventStorageFnc _recv_cb;
 
     std::mutex _sessions_mtx;
-    std::map<std::shared_ptr<SocketDescriptor>, std::shared_ptr<BrokerSession>> _sessions;
+    std::map<std::shared_ptr<SocketDescriptor>, std::shared_ptr<BrokerSessionS>> _sessions;
 
-    std::shared_ptr<BrokerSession> _make_session(const std::shared_ptr<SocketDescriptor>& client);
-    std::shared_ptr<BrokerSession> _find_session(const std::shared_ptr<SocketDescriptor>& client);
+    std::shared_ptr<BrokerSessionS> _make_session(const std::shared_ptr<SocketDescriptor>& client);
+    std::shared_ptr<BrokerSessionS> _find_session(const std::shared_ptr<SocketDescriptor>& client);
 
-    void _walk(const std::shared_ptr<BrokerSession>& session, const std::shared_ptr<SocketDescriptor>& client, const ProtoMessage& msg);
+    void _walk(const std::shared_ptr<BrokerSessionS>& session, const std::shared_ptr<SocketDescriptor>& client, const ProtoMessage& msg);
 
     void _on_connected(const std::string& name, const std::shared_ptr<SocketDescriptor>& client);
     void _on_disconnected(const std::string& name, const std::shared_ptr<SocketDescriptor>& client);

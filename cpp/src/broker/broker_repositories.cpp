@@ -34,14 +34,14 @@ void BrokerRepositories::_publish_registered(){
             repo.second->registered();
 }
 
-void BrokerRepositories::_publish_session_open(const std::shared_ptr<BrokerSession>& session){
+void BrokerRepositories::_publish_session_open(const std::shared_ptr<BrokerSessionS>& session){
     std::lock_guard<std::mutex> lock(_repositories_mtx);
     for (const auto& repo : _repositories)
         if (repo.second && !repo.first.empty())
             repo.second->session_open(session);
 }
 
-void BrokerRepositories::_publish_session_close(const std::shared_ptr<BrokerSession>& session){
+void BrokerRepositories::_publish_session_close(const std::shared_ptr<BrokerSessionS>& session){
     std::lock_guard<std::mutex> lock(_repositories_mtx);
     for (const auto& repo : _repositories)
         if (repo.second && !repo.first.empty())

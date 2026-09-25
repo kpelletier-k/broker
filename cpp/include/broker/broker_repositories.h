@@ -22,8 +22,8 @@ protected:
 
     void _publish_registered();
 
-    void _publish_session_open(const std::shared_ptr<BrokerSession>& session);
-    void _publish_session_close(const std::shared_ptr<BrokerSession>& session);
+    void _publish_session_open(const std::shared_ptr<BrokerSessionS>& session);
+    void _publish_session_close(const std::shared_ptr<BrokerSessionS>& session);
 
 private:
     std::mutex _repositories_mtx;

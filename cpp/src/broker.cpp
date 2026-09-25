@@ -8,7 +8,7 @@ Broker::Broker(const std::string& name,
                 const std::list<std::shared_ptr<Tag>>& tags) :
         BrokerLayers(_to(layers)),
         BrokerRepositories(_to(repositories)),
-        BrokerTags(_to(tags)),
+        BrokerTags(tags),
         name(name){
     for (const auto& e : callers)
         emplace_cmd(e.first, e.second);
@@ -20,16 +20,14 @@ Broker::~Broker(){
     _publish_detached();
 }
 
-std::shared_ptr<Tag> Broker::tag(const std::string& name){
-    return BrokerTags::operator[](name);}
 
 std::shared_ptr<BrokerRepository> Broker::repository(const std::string& name){
     return BrokerRepositories::operator[](name);}
 
-void Broker::on_session_open(const std::shared_ptr<BrokerSession>& session){
+void Broker::on_session_open(const std::shared_ptr<BrokerSessionS>& session){
     _publish_session_open(session);}
 
-void Broker::on_session_close(const std::shared_ptr<BrokerSession>& session){
+void Broker::on_session_close(const std::shared_ptr<BrokerSessionS>& session){
     _publish_session_close(session);}
 
 void Broker::on_log(const std::string& name, EventLogType type, const std::string& message){
@@ -40,7 +38,7 @@ bool Broker::_is_local_broker(const std::vector<std::string>& paths) const{
     return paths.size() == 1 || paths.front() == name;
 }
 
-bool Broker::_call_local_broker(const std::vector<std::string>& paths, const std::shared_ptr<BrokerSession>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc){
+bool Broker::_call_local_broker(const std::vector<std::string>& paths, const std::shared_ptr<BrokerSessionS>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc){
     auto fnc = find_cmd(paths.back());
     if (fnc)
         return fnc(session, method, reply_fnc);
@@ -48,7 +46,7 @@ bool Broker::_call_local_broker(const std::vector<std::string>& paths, const std
     return false;
 }
 
-bool Broker::_call_local_repo(const std::vector<std::string>& paths, const std::shared_ptr<BrokerSession>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc){
+bool Broker::_call_local_repo(const std::vector<std::string>& paths, const std::shared_ptr<BrokerSessionS>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc){
     const auto repo = BrokerRepositories::find(paths.front());
     if (repo){
         auto fnc = repo->find_cmd(paths.back());
@@ -60,7 +58,7 @@ bool Broker::_call_local_repo(const std::vector<std::string>& paths, const std::
     return false;
 }
 
-bool Broker::on_message(const std::shared_ptr<BrokerSession>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc){
+bool Broker::on_message(const std::shared_ptr<BrokerSessionS>& session, const ProtoMessage& method, const LayerReplyFnc& reply_fnc){
     const auto paths = _split(method.name);
     if (paths.empty()){
         reply_fnc(ProtoError{.msg = "fail to parse command name", .id = method.id});

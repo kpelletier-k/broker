@@ -1,5 +1,7 @@
 #include "../../include/broker/broker_cmd.h"
 
+BrokerCmd::BrokerCmd(const std::map<std::string, CmdCallFnc>& callers) : _callers(callers){}
+
 BrokerCmd::~BrokerCmd(){
     _mtx.lock();
     _callers.clear();

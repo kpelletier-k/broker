@@ -39,8 +39,8 @@ public:
 protected:
     void _registered() override{}
     void _unregistered() override{}
-    void _session_open(const std::shared_ptr<BrokerSession>& session) override{}
-    void _session_close(const std::shared_ptr<BrokerSession>& session) override{}
+    void _session_open(const std::shared_ptr<BrokerSessionS>& session) override{}
+    void _session_close(const std::shared_ptr<BrokerSessionS>& session) override{}
 };
 
 TEST(Broker, repositories){
@@ -57,7 +57,7 @@ TEST(Broker, exemple){
     tag_0->value(56789);
     auto tag_1 = std::make_shared<Tag>("tag_1");
 
-    auto fnc = [](const std::shared_ptr<BrokerSession>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc){
+    auto fnc = [](const std::shared_ptr<BrokerSessionS>& session, const ProtoMessage& msg, const LayerReplyFnc& reply_fnc){
         return false;
     };
 
